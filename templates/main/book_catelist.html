@@ -1,0 +1,110 @@
+<style>
+	.d1{
+		background-color: rgb(53,60,68);
+		position: relative;
+		height: 30px;
+		line-height: 30px;
+		padding-left: 10px;
+	}
+	.s1{
+		font-size: 12px;
+		color: white;
+	}
+	.s2{
+		position: absolute;
+		right: 10px;
+	}
+	.s2 a{
+		color: white;
+		font-size: 12px;
+		text-decoration: none;
+	}
+	.t1{
+		border-color:aliceblue;
+		margin-top: 2px;
+		font-size: 12px;
+		text-align: center;
+		background-color: rgb(230,242,254);
+	}
+	.bottom{
+		font-size: 13px;
+		padding-left: 15px;
+		position: relative;
+	}
+	.bs{
+		position: absolute;
+		right: 40px;
+	}
+	.bs a{
+		text-decoration: none;
+		color: black;
+	}
+	.bs a:hover{
+		color: cornflowerblue;
+		text-decoration: underline;
+	}
+</style>
+{% load static %}
+<script src="{% static 'js/jquery-1.8.3.min.js' %}"></script>
+<script></script>
+<div class="d1">
+	<span class="s1">类别基本信息表</span>
+	<span class="s2">
+		<a href="#">添加</a>
+		<a href="#" onclick="del();">删除</a>
+	</span>
+</div>
+<table border="2" width="100%" cellspacing="0" class="t1">
+	<tr>
+		<td>
+			<input type="checkbox" id="all" />
+		</td>
+		<td>类别ID</td>
+		<td>类别名称</td>
+		<td>父类别</td>
+		<td>类别种类</td>
+	</tr>
+    {% for cate in cates %}
+        <tr>
+		<td>
+			<input type="checkbox" name="xz" value="{{ p.id }}"/>
+		</td>
+		<td>{{ cate.id }}</td>
+		<td>{{ cate.class_name }}</td>
+                {% if cate.parent_id == 0%}
+                    <td>
+                        无
+                    </td>
+                {% else %}
+                    {% for b in b_c %}
+                        {% if cate.parent_id == b.id%}
+                             <td>
+                                {{ b.class_name }}
+                            </td>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+
+        {% if cate.parent_id %}
+            <td>二级类别</td>
+        {% else %}
+            <td>一级类别</td>
+        {% endif %}
+	</tr>
+    {% endfor %}
+
+</table>
+<div class="bottom">
+	共有 {{ length }}条记录，当前第{{ page.number }}页，共{{ page.paginator.num_pages }} 页
+	<span class="bs">
+{#    上一页#}
+        {% if page.has_previous %}
+            <a href="{% url 'management_system:books_list' %}?num={{ page.previous_page_number }}" style="margin-right: 20px;">上一页</a>
+        {% endif %}
+{#  下一页#}
+		{% if page.has_next %}
+            <a href="{% url 'management_system:books_list' %}?num={{ page.next_page_number }}" style="margin-right: 20px;">下一页</a>
+        {% endif %}
+
+	</span>
+</div>
